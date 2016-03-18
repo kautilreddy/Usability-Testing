@@ -1,0 +1,103 @@
+doctype html
+html(lang='en')
+  head
+    meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    // The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags
+    link(rel='shortcut icon', href='./img/favicon.ico', type='image/ico')
+    link(rel='icon', href='./img/favicon.ico', type='image/ico')
+    title Create Project
+    style(type='text/css').
+      .panel-width {
+      width: 500px;
+      }
+    script(type='text/javascript').
+      function clearForm(){
+      $("#ProjectForm")[0].reset();
+      }
+    // Bootstrap
+    link(href='css/bootstrap.min.css', rel='stylesheet')
+    // HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries
+    // WARNING: Respond.js doesn't work if you view the page via file://
+    //
+      if lt IE 9script(src='https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js')
+      script(src='https://oss.maxcdn.com/respond/1.4.2/respond.min.js')
+  body
+    nav.navbar.navbar-inverse
+      .container-fluid
+        // Brand and toggle get grouped for better mobile display
+        .navbar-header
+          button.navbar-toggle.collapsed(type='button', data-toggle='collapse', aria-expanded='false')
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.navbar-brand(href='/home') Usability Testing
+        // Collect the nav links, forms, and other content for toggling
+        .collapse.navbar-collapse
+          ul.nav.navbar-nav
+            li
+              a(href='/#') About Us
+          ul.nav.navbar-nav.navbar-right
+            li.dropdown
+              a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
+                welcome #{user.username}
+                  span.caret
+              ul.dropdown-menu
+                li
+                  a(href='/signout') Log out
+        // /.navbar-collapse
+      // /.container-fluid
+    .row
+      .center-block.col-md-10(style='float: none;')
+        .panel.panel-default
+          .panel-body.panel-width
+            h1 Create a new project!
+            form#ProjectForm.form-horizontal.form-signin(action='/regproject', method='POST')
+              .form-group
+                label.col-sm-4.control-label(for='projectname') Project Name:
+                .col-sm-8
+                  input#projectname.form-control(type='text', placeholder='Project Name', required='', name='pname')
+              .form-group
+                label.col-sm-4.control-label(for='ucount') Max Users Allowed:
+                .col-sm-8
+                  input#ucount.form-control(type='number', placeholder='', required='', name='maxcount')
+              .form-group
+                label.col-sm-4.control-label(for='url') URL to analyze:
+                .col-sm-8
+                  input#url.form-control(type='text', placeholder='', required='', name='url')
+              .form-group
+                label.col-sm-4.control-label(for='task') Task to finish:
+                .col-sm-8
+                  input#task.form-control(type='text', placeholder='', required='', name='task')
+              .row
+                label.col-sm-4.control-label Options:
+              .form-group
+                .col-sm-5.col-sm-offset-2.checkbox
+                  label
+                    input#ctrack(type='checkbox', value='', name='ctrack')
+                    | Click Tracking
+                .col-sm-5.checkbox
+                  label
+                    input#network(type='checkbox', value='', name='performance')
+                    | Network Performance
+                .col-sm-5.col-sm-offset-2.checkbox
+                  label
+                    input#semantic(type='checkbox', value='', name='semantics')
+                    | Semantics Analysis
+                .col-sm-5.checkbox
+                  label
+                    input#query(type='checkbox', value='', name='query')
+                    | Post interaction query
+              .col-sm-offset-2.col-sm-3
+                button.btn.btn-default(type='submit') Create!
+              .col-sm-2
+                p  
+              .col-sm-3
+                a.btn.btn-default(onclick='clearForm()')   Clear  
+    // jQuery (necessary for Bootstrap's JavaScript plugins)
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js')
+    // Include all compiled plugins (below), or include individual files as needed
+    script(src='js/bootstrap.min.js')

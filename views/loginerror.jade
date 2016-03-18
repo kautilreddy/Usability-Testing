@@ -1,0 +1,83 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    // The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags
+    link(rel='shortcut icon', href='./img/favicon.ico' type = 'image/ico')
+    link(rel='icon', href='./img/favicon.ico' type = 'image/ico')
+    script(src='js/signup_validation.js')
+    title Home
+    style(type='text/css').
+      .panel-width {
+      width: 500px;
+      }
+    script(type='text/javascript').
+      function clearForm(){
+      $("#signupForm")[0].reset();
+      }
+    // Bootstrap
+    link(href='./css/bootstrap.min.css', rel='stylesheet')
+    // HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries
+    // WARNING: Respond.js doesn't work if you view the page via file://
+    //
+      if lt IE 9
+      script(src='https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js')
+      script(src='https://oss.maxcdn.com/respond/1.4.2/respond.min.js')
+  body
+    nav.navbar.navbar-inverse
+      .container-fluid
+        // Brand and toggle get grouped for better mobile display
+        .navbar-header
+          button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#bs-example-navbar-collapse-1', aria-expanded='false')
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.navbar-brand(href='#') Usability Testing
+        // Collect the nav links, forms, and other content for toggling
+        #bs-example-navbar-collapse-1.collapse.navbar-collapse
+          ul.nav.navbar-nav
+            li
+              a(href='#') About Us
+          form#loginform.navbar-form.navbar-right(action='login', method='POST')
+            .form-group.has-error
+              input.form-control(type='text', placeholder='User name', required='',name='username')
+              input.form-control(type='password', placeholder='Password', required='',name='password')
+            // a.btn.btn-success(href='./urlreq.html') Login
+            button.btn.btn-success(type='submit') Try again
+          p.navbar-text.navbar-right Invalid Username/Password
+        // /.navbar-collapse
+      // /.container-fluid
+    .row
+      .center-block.col-md-10(style='float: none;')
+        .panel.panel-default
+          .panel-body.panel-width
+            h1 Sign up here!
+            form#signupForm.form-horizontal.form-signin(action='/signup', method='POST' onsubmit="return validateAndPost()")
+              .form-group
+                label.col-sm-4.control-label(for='inputUsername') Username
+                .col-sm-8
+                  input#inputUsername3.form-control(type='text', placeholder='Username', required='',name='username')
+              .form-group
+                label.col-sm-4.control-label(for='inputEmail') Email
+                .col-sm-8
+                  input#inputEmail3.form-control(type='email', placeholder='Email', required='',name='email')
+              .form-group
+                label.col-sm-4.control-label(for='inputPassword') Password
+                .col-sm-8
+                  input#inputPassword1.form-control(type='password', placeholder='Password', required='',name='password')
+              .form-group
+                label.col-sm-4.control-label(for='inputPassword') Reenter Password
+                .col-sm-8
+                  input#inputPassword2.form-control(type='password', placeholder='Password', required='')
+              .form-group
+                .col-sm-offset-4.col-sm-3
+                  button.btn.btn-default(type='submit') Sign up!
+                .col-sm-3
+                  a.btn.btn-default(onclick='clearForm()')   Clear  
+    // jQuery (necessary for Bootstrap's JavaScript plugins)
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js')
+    // Include all compiled plugins (below), or include individual files as needed
+    script(src='./js/bootstrap.min.js')
