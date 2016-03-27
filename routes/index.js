@@ -56,6 +56,7 @@ module.exports = function(passport){
 		res.render('createpj',{user:req.user});
 	});
 	router.get('/project?:id', isAuthenticated, function(req, res){
+			
 			res.render('home',{user:req.user});
 	});
 	router.post('/regproject', isAuthenticated, function(req, res){
