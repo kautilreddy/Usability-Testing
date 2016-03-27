@@ -52,8 +52,6 @@
   </nav>
       <div style="float: none;" class="center-block col-md-10">
       <div class="panel panel-default">
-
-          <div class="container-fluid">
           <div class="col-md-12">
           <h1>Name</h1>
           </div>
@@ -63,9 +61,9 @@
             <h3>URL to share:</h3> 
             </div>
             <div class="col-sm-8 input-group" id="urlbox">
-            <input type="text" class="form-control" value="Search for..." style="margin-top: 5px;" readonly="readonly">
+            <input type="text" class="form-control" value="Search for..some" style="margin-top: 5px;" readonly="readonly" id="url">
             <span class="input-group-btn">
-              <button class="btn btn-default" type="button" style="margin-top: 5px;" onclick="">copy</button>
+              <button class="btn btn-default" type="button" style="margin-top: 5px;" id="copy-button" data-toggle="tooltip" title="Copied!" data-clipboard-target="#url">copy</button>
             </span>
           </div>
         </div>
@@ -77,6 +75,20 @@
         </div>
     </div>
 </div>
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins)--><script src="./register_files/jquery.min.js"></script><!-- Include all compiled plugins (below), or include individual files as needed--><script src="./register_files/bootstrap.min.js"></script>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins)--><script src="js/jquery.min.js"></script><!-- Include all compiled plugins (below), or include individual files as needed--><script src="js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/clipboard.js/1.5.8/clipboard.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    $('#copy-button').tooltip({trigger:'',placement:'bottom'});   new Clipboard('#copy-button');
+});
+$("#copy-button").click(function(){
+
+	$('#copy-button').tooltip('show');
+	setTimeout(function(){
+	$('#copy-button').tooltip('hide');
+	}, 1000);
+});
+
+</script>
 </body>
 </html>
