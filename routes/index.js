@@ -55,12 +55,30 @@ module.exports = function(passport){
 	router.get('/createpj', isAuthenticated, function(req, res){
 		res.render('createpj',{user:req.user});
 	});
-	router.get('/project?:id', isAuthenticated, function(req, res){
-		console.log("the id is "+req.params.id);
-			Project.findById(id,function(err,projectDetails){
+	router.get('/project/:pid', isAuthenticated, function(req, res){
+		var pid = req.params.pid;
+			Project.findById(pid,function(err,projectDetails){
 				console.log(projectDetails);
 				res.render('project',{project:projectDetails});
 			});
+	});
+
+	router.get('/interact/:pid', isAuthenticated, function(req, res){
+		var pid = req.params.pid;
+			Project.findById(pid,function(err,projectDetails){
+				if(projectDetails.interactionsLeft>0){
+       				Project.update({'_id':projectDetails._id},{$inc:{'interactionsLeft':-1}},function(err){
+       					if(err){
+       						console.log('some error occurred ' + err);
+       					throw err;
+       					}
+       				});
+					res.render('interact',{project:projectDetails});
+				}
+				else{
+					res.render('noInteractionsLeft');
+			}
+		});
 	});
 	router.post('/regproject', isAuthenticated, function(req, res){
 		console.log('req object = '+req.user.username+'\n');
@@ -73,6 +91,7 @@ module.exports = function(passport){
        		newProject.ctrack = (req.param('ctrack')=='');
        		newProject.performance = (req.param('performance')=='');
        		newProject.semantics = (req.param('semantics')=='');
+       		newProject.interactionsLeft= newProject.maxcount;
        		newProject.query = (req.param('query')=='');
        		newProject.url = (req.param('url'));
        		newProject.task = (req.param('task'));

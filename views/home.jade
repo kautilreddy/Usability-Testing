@@ -64,7 +64,7 @@ html(lang='en')
                 when 0
                   a.list-group-item.disabled(href='#') No projects to display
               each project,index in user.projects
-                a.list-group-item(href='/project?id='+project.pro_id) #{project.name}
+                a.list-group-item(href='/project/'+project.pro_id) #{project.name}
               // <a href="#" class="list-group-item">Project 1</a>
     // jQuery (necessary for Bootstrap's JavaScript plugins)
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js')
