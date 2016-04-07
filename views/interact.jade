@@ -21,12 +21,21 @@ html(lang='en')
   body
     div
       h1 Task: #{project.task}
-      input(type='button', value='Finish' onclick="")
-      input(type='button', value='Problem' onclick="")
-    iframe(src=''+project.url, width='100%', style='height: 100vh;')
+      input(type='button', value='Finish')
+      input(type='button', value='Problem')
+    iframe#main(src=''+project.url, width='100%', style='height: 100vh;')
       p Problem loading iframe
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js')
     script(type='text/javascript').
       $(document).ready(function(){
+      var beforeLoad = (new Date()).getTime();
+      var afterLoad=0;
+      $('#main').on('load', function() {
+      afterLoad = (new Date()).getTime();
+      var data = {
+      time : afterLoad-beforeLoad
+      };
+      $.post( '/postLTime/#{project._id}',data,function(res){console.log("sent data")},'json');
+      });
       window.alert("Please read the task and perform the same.Press finish after completing the task or else problem if theres a problem");
       });

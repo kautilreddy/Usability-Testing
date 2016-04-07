@@ -11,5 +11,6 @@ module.exports = mongoose.model('Project',{
 	semantics:Boolean,
 	query:Boolean,
 	url:String,
-	task:String
+	task:String,
+	averageLoadTime:Number
 });

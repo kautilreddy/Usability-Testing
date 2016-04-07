@@ -19,12 +19,21 @@
   </head>
   <body>
       <div> <h1>Task: </h1> <input type="button" value="Finish"><input type="button" value="Problem"></div>
-      <iframe src="https://kautilreddy.wordpress.com/" width="100%" style="height: 100vh;"><p>Problem loading iframe</p></iframe>
+      <iframe src="https://kautilreddy.wordpress.com/" width="100%" style="height: 100vh;" id="main"><p>Problem loading iframe</p></iframe>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
       <script type="text/javascript">
-         $(document).ready(function(){
+      $(document).ready(function(){   
           window.alert("Please read the task and perform the same.Press finish after completing the task or else problem if theres a problem");
-         });
+          var beforeLoad = (new Date()).getTime();
+          var afterLoad=0;
+          $('#main').on('load', function() {
+            afterLoad = (new Date()).getTime();   
+            var data = {
+              time = afterLoad-beforeLoad;
+            };
+            $.post( "/postLTime/:pid",data);
+          });
+      });
       </script>
   </body>
 </html>

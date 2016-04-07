@@ -63,21 +63,39 @@ module.exports = function(passport){
 			});
 	});
 
-	router.get('/interact/:pid', isAuthenticated, function(req, res){
+	router.get('/interact/:pid', function(req, res){
 		var pid = req.params.pid;
 			Project.findById(pid,function(err,projectDetails){
-				if(projectDetails.interactionsLeft>0){
-       				Project.update({'_id':projectDetails._id},{$inc:{'interactionsLeft':-1}},function(err){
-       					if(err){
-       						console.log('some error occurred ' + err);
-       					throw err;
-       					}
-       				});
+				if(err){
+					res.status(404);
+					res.send("page not found");
+				}
+				else if(projectDetails.interactionsLeft>0){
 					res.render('interact',{project:projectDetails});
 				}
 				else{
 					res.render('noInteractionsLeft');
 			}
+		});
+	});
+	router.post('/postLTime/:pid',function(req,res){
+		var pid = req.params.pid;
+		console.log('in post time'+JSON.stringify(req.body));
+			Project.findById(pid,function(err,projectDetails){
+				if(err){
+					res.status(404);
+					res.send("no such pid");
+				}
+				var timetoput = ((projectDetails.averageLoadTime*(projectDetails.maxcount-projectDetails.interactionsLeft))+(
+			req.body.time))/(projectDetails.maxcount-projectDetails.interactionsLeft-1);
+       			Project.update({'_id':projectDetails._id},{$inc:{'interactionsLeft':-1},$set:{'averageLoadTime':timetoput}},function(err){
+       				if(err){
+       					console.log('some error occurred ' + err);
+       				throw err;
+       				}
+       			});
+			res.status(200);
+			res.send('time added');
 		});
 	});
 	router.post('/regproject', isAuthenticated, function(req, res){
@@ -95,6 +113,7 @@ module.exports = function(passport){
        		newProject.query = (req.param('query')=='');
        		newProject.url = (req.param('url'));
        		newProject.task = (req.param('task'));
+       		newProject.averageLoadTime = 0;
        		// save the user
        		newProject.save(function(err,proj) {
        			if (err){
