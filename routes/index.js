@@ -13,7 +13,9 @@ var isAuthenticated = function (req, res, next) {
 	// if the user is not authenticated then redirect him to the login page
 	res.redirect('/');
 }
-
+function isNotRealValue(obj){
+ return !(obj && obj !== "null" && obj!== "undefined");
+}
 module.exports = function(passport){
 
 	/* GET login page. */
@@ -58,7 +60,10 @@ module.exports = function(passport){
 	router.get('/project/:pid', isAuthenticated, function(req, res){
 		var pid = req.params.pid;
 			Project.findById(pid,function(err,projectDetails){
-				console.log(projectDetails);
+				if(err||isNotRealValue(projectDetails)){
+					res.status(404);
+					res.send("no such pid");
+				}
 				res.render('project',{project:projectDetails});
 			});
 	});
@@ -66,7 +71,8 @@ module.exports = function(passport){
 	router.get('/interact/:pid', function(req, res){
 		var pid = req.params.pid;
 			Project.findById(pid,function(err,projectDetails){
-				if(err){
+				console.log(typeof projectDetails);
+				if(err||isNotRealValue(projectDetails)){
 					res.status(404);
 					res.send("page not found");
 				}
@@ -82,12 +88,15 @@ module.exports = function(passport){
 		var pid = req.params.pid;
 		console.log('in post time'+JSON.stringify(req.body));
 			Project.findById(pid,function(err,projectDetails){
-				if(err){
+				if(err||isNotRealValue(projectDetails)){
 					res.status(404);
 					res.send("no such pid");
 				}
-				var timetoput = ((projectDetails.averageLoadTime*(projectDetails.maxcount-projectDetails.interactionsLeft))+(
-			req.body.time))/(projectDetails.maxcount-projectDetails.interactionsLeft-1);
+				var totalInteractions = (projectDetails.maxcount-projectDetails.interactionsLeft);
+				var totalLoadTime = projectDetails.averageLoadTime*totalInteractions;
+				var totalPlusCurrent = totalLoadTime + parseInt(req.body.time);
+				var timetoput = (totalPlusCurrent)/(totalInteractions+1);
+				console.log(timetoput);
        			Project.update({'_id':projectDetails._id},{$inc:{'interactionsLeft':-1},$set:{'averageLoadTime':timetoput}},function(err){
        				if(err){
        					console.log('some error occurred ' + err);
@@ -101,6 +110,10 @@ module.exports = function(passport){
 	router.post('/regproject', isAuthenticated, function(req, res){
 		console.log('req object = '+req.user.username+'\n');
 		User.findById(req.user._id,function(err,user){
+			if(err||isNotRealValue(user)){
+					res.status(404);
+					res.send("no such user");
+			}
 			var newProject = new Project();
         	// set the user's local credentials
         	console.log(req.param('ctrack')+' comparing with ='+ (req.param('ctrack')=='') + ' no string existing'+(req.param('performance')));

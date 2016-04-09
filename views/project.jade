@@ -57,7 +57,7 @@ html(lang='en')
           .col-md-3
             h3 URL to share:
           #urlbox.col-sm-8.input-group
-            input#url.form-control(type='text', value='localhost:3000/interact/'+project._id, style='margin-top: 5px;', readonly='readonly')
+            input#url.form-control(type='text', value='localhost:8080/interact/'+project._id, style='margin-top: 5px;', readonly='readonly')
             span.input-group-btn
               button#copy-button.btn.btn-default(type='button', style='margin-top: 5px;', data-toggle='tooltip', title='Copied!', data-clipboard-target='#url') copy
         .container-fluid
@@ -66,6 +66,9 @@ html(lang='en')
         .container-fluid
           .col-md-12
             h3 Interactions Left: #{project.interactionsLeft}
+        .container-fluid
+          .col-md-12
+            h3 Average Load Time: #{project.averageLoadTime}
     // jQuery (necessary for Bootstrap's JavaScript plugins)
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js')
     // Include all compiled plugins (below), or include individual files as needed
