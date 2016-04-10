@@ -3,6 +3,7 @@ var router = express.Router();
 var request = require('request');
 var User = require('../models/user');
 var Project = require('../models/project');
+var DefaultList = require('../default_list');
 
 var isAuthenticated = function (req, res, next) {
 	// if user is authenticated in the session, call the next() to call the next request handler 
@@ -14,15 +15,15 @@ var isAuthenticated = function (req, res, next) {
 	res.redirect('/');
 }
 function isNotRealValue(obj){
- return !(obj && obj !== "null" && obj!== "undefined");
+	return !(obj && obj !== "null" && obj!== "undefined");
 }
 module.exports = function(passport){
 
 	/* GET login page. */
 	router.get('/', function(req, res) {
     	// Display the Login page with any flash message, if any
-		res.render('index');
-	});
+    	res.render('index');
+    });
 
 	/* Handle Login POST */
 	router.post('/login', passport.authenticate('login', {
@@ -44,89 +45,108 @@ module.exports = function(passport){
 	}));
 	router.get('/signuperror', function(req, res) {
     	// Display the Login page with any flash message, if any
-		res.render('signuperror');
-	});	
+    	res.render('signuperror');
+    });	
 	router.get('/loginerror', function(req, res) {
     	// Display the Login page with any flash message, if any
-		res.render('loginerror');
-	});
+    	res.render('loginerror');
+    });
 	/* GET Home Page */
 	router.get('/home', isAuthenticated, function(req, res){
-			res.render('home',{user:req.user});
+		res.render('home',{user:req.user});
 	});
 	router.get('/createpj', isAuthenticated, function(req, res){
 		res.render('createpj',{user:req.user});
 	});
 	router.get('/project/:pid', isAuthenticated, function(req, res){
 		var pid = req.params.pid;
-			Project.findById(pid,function(err,projectDetails){
-				if(err||isNotRealValue(projectDetails)){
-					res.status(404);
-					res.send("no such pid");
-				}
-				res.render('project',{project:projectDetails});
-			});
+		Project.findById(pid,function(err,projectDetails){
+			if(err||isNotRealValue(projectDetails)){
+				res.status(404);
+				res.send("no such pid");
+			}
+			res.render('project',{project:projectDetails});
+		});
 	});
 
 	router.get('/interact/:pid', function(req, res){
 		var pid = req.params.pid;
-			Project.findById(pid,function(err,projectDetails){
-				console.log(typeof projectDetails);
-				if(err||isNotRealValue(projectDetails)){
-					res.status(404);
-					res.send("page not found");
-				}
-				else if(projectDetails.interactionsLeft>0){
-					res.render('interact',{project:projectDetails});
-				}
-				else{
-					res.render('noInteractionsLeft');
+		Project.findById(pid,function(err,projectDetails){
+			console.log(typeof projectDetails);
+			if(err||isNotRealValue(projectDetails)){
+				res.status(404);
+				res.send("page not found");
+			}
+			else if(projectDetails.interactionsLeft>0){
+				res.render('interact',{project:projectDetails});
+			}
+			else{
+				res.render('noInteractionsLeft');
 			}
 		});
 	});
 	router.post('/postLTime/:pid',function(req,res){
 		var pid = req.params.pid;
 		console.log('in post time'+JSON.stringify(req.body));
-			Project.findById(pid,function(err,projectDetails){
-				if(err||isNotRealValue(projectDetails)){
-					res.status(404);
-					res.send("no such pid");
-				}
-				var totalInteractions = (projectDetails.maxcount-projectDetails.interactionsLeft);
-				var totalLoadTime = projectDetails.averageLoadTime*totalInteractions;
-				var totalPlusCurrent = totalLoadTime + parseInt(req.body.time);
-				var timetoput = (totalPlusCurrent)/(totalInteractions+1);
-				console.log(timetoput);
-       			Project.update({'_id':projectDetails._id},{$inc:{'interactionsLeft':-1},$set:{'averageLoadTime':timetoput}},function(err){
-       				if(err){
-       					console.log('some error occurred ' + err);
-       				throw err;
-       				}
-       			});
+		Project.findById(pid,function(err,projectDetails){
+			if(err||isNotRealValue(projectDetails)){
+				res.status(404);
+				res.send("no such pid");
+			}
+			var totalInteractions = (projectDetails.maxcount-projectDetails.interactionsLeft);
+			var totalLoadTime = projectDetails.averageLoadTime*totalInteractions;
+			var totalPlusCurrent = totalLoadTime + parseInt(req.body.time);
+			var timetoput = (totalPlusCurrent)/(totalInteractions+1);
+			console.log(timetoput);
+			if(req.body.first == true){
+				Project.update({'_id':projectDetails._id},{$inc:{'interactionsLeft':-1},$set:{'averageLoadTime':timetoput}},function(err){
+					if(err){
+						console.log('some error occurred ' + err);
+						throw err;
+					}
+				});
+			}
+			else{
+				Project.update({'_id':projectDetails._id},{$set:{'averageLoadTime':timetoput}},function(err){
+					if(err){
+						console.log('some error occurred ' + err);
+						throw err;
+					}
+				});
+			}
 			res.status(200);
 			res.send('time added');
 		});
 	});
 	router.post('/regproject', isAuthenticated, function(req, res){
 		console.log('req object = '+req.user.username+'\n');
+		console.log(JSON.stringify(req.body));
+		//console.log(JSON.stringify(DefaultList));
 		User.findById(req.user._id,function(err,user){
 			if(err||isNotRealValue(user)){
-					res.status(404);
-					res.send("no such user");
+				res.status(404);
+				res.send("no such user");
 			}
 			var newProject = new Project();
         	// set the user's local credentials
-        	console.log(req.param('ctrack')+' comparing with ='+ (req.param('ctrack')=='') + ' no string existing'+(req.param('performance')));
-       	 	newProject.pname = req.param('pname');
-       		newProject.maxcount = req.param('maxcount');
-       		newProject.ctrack = (req.param('ctrack')=='');
-       		newProject.performance = (req.param('performance')=='');
-       		newProject.semantics = (req.param('semantics')=='');
-       		newProject.interactionsLeft= newProject.maxcount;
-       		newProject.query = (req.param('query')=='');
-       		newProject.url = (req.param('url'));
-       		newProject.task = (req.param('task'));
-       		newProject.averageLoadTime = 0;
+        	//console.log(req.param('ctrack')+' comparing with ='+ (req.param('ctrack')=='') + ' no string existing'+(req.param('performance')));
+        	newProject.pname = req.param('pname');
+        	newProject.maxcount = req.param('maxcount');
+        	newProject.ctrack = (req.param('ctrack')=='');
+        	newProject.performance = (req.param('performance')=='');
+        	newProject.semantics = (req.param('semantics')=='');
+        	newProject.interactionsLeft= newProject.maxcount;
+        	newProject.query = (req.param('query')=='');
+        	newProject.url = (req.param('url'));
+        	newProject.task = (req.param('task'));
+        	newProject.averageLoadTime = 0;
+        	if(req.param('task')==="custom"){
+        		newProject.questions = DefaultList; //change later
+        	}
+        	else{
+        		newProject.questions = DefaultList;
+        	}
+        	console.log(JSON.stringify(newProject));
        		// save the user
        		newProject.save(function(err,proj) {
        			if (err){
@@ -140,9 +160,9 @@ module.exports = function(passport){
        					throw err;
        				}
        			});
-        	});
-    	});
-    	res.redirect('/home');
+       		});
+       	});
+		res.redirect('/home');
 	});
 	router.post('/urlgiven',function(req,res){
 		console.log('in urlgiven post');
@@ -151,7 +171,7 @@ module.exports = function(passport){
 		var start = date.getTime();
 		console.log(start);
 		request("http://"+req.param('url'), function(error, response, body) {
-		 	console.log("server side time taken = "+((new Date().getTime()) - start));
+			console.log("server side time taken = "+((new Date().getTime()) - start));
 		});
 		res.redirect('http://'+req.param('url'));
 	});

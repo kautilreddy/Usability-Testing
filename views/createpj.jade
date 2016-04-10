@@ -11,7 +11,7 @@ html(lang='en')
     title Create Project
     style(type='text/css').
       .panel-width {
-      width: 500px;
+      max-width: 500px;
       }
     script(type='text/javascript').
       function clearForm(){
@@ -29,14 +29,14 @@ html(lang='en')
       .container-fluid
         // Brand and toggle get grouped for better mobile display
         .navbar-header
-          button.navbar-toggle.collapsed(type='button', data-toggle='collapse', aria-expanded='false')
+          button.navbar-toggle.collapsed(type='button', data-toggle='collapse', aria-expanded='false' data-target='#cmenu')
             span.sr-only Toggle navigation
             span.icon-bar
             span.icon-bar
             span.icon-bar
           a.navbar-brand(href='/home') Usability Testing
         // Collect the nav links, forms, and other content for toggling
-        .collapse.navbar-collapse
+        #cmenu.collapse.navbar-collapse
           ul.nav.navbar-nav
             li
               a(href='/#') About Us
@@ -50,7 +50,7 @@ html(lang='en')
                   a(href='/signout') Log out
         // /.navbar-collapse
       // /.container-fluid
-    .row
+    .container-fuild
       .center-block.col-md-10(style='float: none;')
         .panel.panel-default
           .panel-body.panel-width
@@ -91,6 +91,17 @@ html(lang='en')
                   label
                     input#query(type='checkbox', value='', name='query')
                     | Post interaction query
+                #queryprompt
+                  .row
+                    label.col-sm-4.control-label Query Type:
+                  .col-sm-5.col-sm-offset-2.radio
+                    label
+                      input(value='default', name='queryType', type='radio' checked='checked')
+                      | Default
+                  .col-sm-5.radio
+                    label
+                      input(value='custom', name='queryType', type='radio')
+                      | Custom
               .col-sm-offset-2.col-sm-3
                 button.btn.btn-default(type='submit') Create!
               .col-sm-2
@@ -99,5 +110,18 @@ html(lang='en')
                 a.btn.btn-default(onclick='clearForm()')   Clear  
     // jQuery (necessary for Bootstrap's JavaScript plugins)
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js')
-    // Include all compiled plugins (below), or include individual files as needed
-    script(src='js/bootstrap.min.js')
+    script(type='text/javascript').
+      $(document).ready(function(){
+      $('#queryprompt').hide();
+      });
+      function clearForm(){
+      $("#ProjectForm")[0].reset();
+      }
+      $("#query").change(function() {
+      if($(this).is(":checked")) {
+      $('#queryprompt').show();
+      }
+      else{
+      $('#queryprompt').hide();
+      }
+      });

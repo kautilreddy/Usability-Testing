@@ -11,7 +11,7 @@ html(lang='en')
     title Home
     style(type='text/css').
       .panel-width {
-      width: 500px;
+      max-width: 500px;
       }
     script(type='text/javascript').
       function clearForm(){
@@ -30,14 +30,14 @@ html(lang='en')
       .container-fluid
         // Brand and toggle get grouped for better mobile display
         .navbar-header
-          button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#bs-example-navbar-collapse-1', aria-expanded='false')
+          button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#cmenu', aria-expanded='false')
             span.sr-only Toggle navigation
             span.icon-bar
             span.icon-bar
             span.icon-bar
           a.navbar-brand(href='#') Usability Testing
         // Collect the nav links, forms, and other content for toggling
-        #bs-example-navbar-collapse-1.collapse.navbar-collapse
+        #cmenu.collapse.navbar-collapse
           ul.nav.navbar-nav
             li
               a(href='#') About Us
@@ -50,7 +50,7 @@ html(lang='en')
           p.navbar-text.navbar-right Already a user?
         // /.navbar-collapse
       // /.container-fluid
-    .row
+    .container-fluid
       .center-block.col-md-10(style='float: none;')
         .panel.panel-default
           .panel-body.panel-width

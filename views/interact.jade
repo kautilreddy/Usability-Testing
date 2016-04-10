@@ -28,14 +28,19 @@ html(lang='en')
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js')
     script(type='text/javascript').
       $(document).ready(function(){
+      var loadCount = 0;
       var beforeLoad = (new Date()).getTime();
       var afterLoad=0;
       $('#main').on('load', function() {
       afterLoad = (new Date()).getTime();
       var data = {
-      time : afterLoad-beforeLoad
+      time : afterLoad-beforeLoad,
+      first: (loadCount==0)
       };
+      if(loadCount==0){
       $.post( '/postLTime/#{project._id}',data,function(res){console.log("sent data")},'json');
+      }
+      loadCount = loadCount+1;
       });
       window.alert("Please read the task and perform the same.Press finish after completing the task or else problem if theres a problem");
       });

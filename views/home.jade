@@ -31,30 +31,32 @@ html(lang='en')
       .container-fluid
         // Brand and toggle get grouped for better mobile display
         .navbar-header
-          button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#bs-example-navbar-collapse-1', aria-expanded='false')
+          button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#cmenu', aria-expanded='false')
             span.sr-only Toggle navigation
             span.icon-bar
             span.icon-bar
             span.icon-bar
           a.navbar-brand(href='/home ') Usability Testing
         // Collect the nav links, forms, and other content for toggling
-        #bs-example-navbar-collapse-1.collapse.navbar-collapse
+        #cmenu.collapse.navbar-collapse
           ul.nav.navbar-nav
             li
               a(href='#') About Us
-          ul.nav.navbar-nav.navbar-right
-            li
-              a.navbar-brand(href='/createpj') Create Project
-            li.dropdown
-              a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
-                welcome #{user.username}
-                  span.caret
-              ul.dropdown-menu
-                li
-                  a(href='/signout') Log out
+          .navbar-right
+            ul.nav.navbar-nav
+              li
+                a.navbar-brand(href='/createpj' style="height: 10px;") Create Project
+            ul.nav.navbar-nav
+              li.dropdown
+                a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
+                  welcome #{user.username}
+                    span.caret
+                ul.dropdown-menu
+                  li
+                    a(href='/signout') Log out
         // /.navbar-collapse
       // /.container-fluid
-    .row
+    .container-fluid
       .center-block.col-md-10(style='float: none;')
         .panel.panel-default
           .panel-body
