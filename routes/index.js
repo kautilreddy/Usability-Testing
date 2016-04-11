@@ -105,9 +105,13 @@ module.exports = function(passport){
 				res.send("no such pid");
 			}
 			var totalInteractions = (projectDetails.maxcount-projectDetails.interactionsLeft);
-			var totalLoadTimeAvg = (projectDetails.averageLoadTime/(totalInteractions+1))*(totalInteractions/(totalInteractions+1));
+			var totalLoadTimeAvg = (projectDetails.averageLoadTime/(totalInteractions+1))*(totalInteractions);
 			var totalPlusCurrent = totalLoadTimeAvg + (parseInt(req.body.time)/(totalInteractions+1));
 			var timetoput = (totalPlusCurrent);
+
+			console.log('total inter =  '+totalInteractions);
+			console.log('totalLoadTimeAvg =  '+totalLoadTimeAvg);
+			console.log('total plus current =  '+totalPlusCurrent);
 			console.log(timetoput);
 			if(isNaN(timetoput)){
 				res.status(404);
