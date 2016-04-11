@@ -14,5 +14,6 @@ module.exports = mongoose.model('Project',{
 	task:String,
 	averageLoadTime:Number,
 	avgSUS:Number,
+	queryType:String,
 	questions:[String]
 });

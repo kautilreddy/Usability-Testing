@@ -85,6 +85,17 @@ module.exports = function(passport){
 			}
 		});
 	});
+	router.get('/query/:pid', function(req, res){
+		var pid = req.params.pid;
+		Project.findById(pid,function(err,projectDetails){
+			console.log(typeof projectDetails);
+			if(err||isNotRealValue(projectDetails)){
+				res.status(404);
+				res.send("page not found");
+			}
+			res.render('query',{project:projectDetails});
+		});
+	});
 	router.post('/postLTime/:pid',function(req,res){
 		var pid = req.params.pid;
 		console.log('in post time'+JSON.stringify(req.body));
@@ -139,8 +150,9 @@ module.exports = function(passport){
         	newProject.query = (req.param('query')=='');
         	newProject.url = (req.param('url'));
         	newProject.task = (req.param('task'));
+        	newProject.queryType = (req.param('queryType'));
         	newProject.averageLoadTime = 0;
-        	if(req.param('task')==="custom"){
+        	if(req.param('queryType')==="custom"){
         		newProject.questions = DefaultList; //change later
         	}
         	else{
