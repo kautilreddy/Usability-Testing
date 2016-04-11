@@ -109,6 +109,10 @@ module.exports = function(passport){
 			var totalPlusCurrent = totalLoadTime + parseInt(req.body.time);
 			var timetoput = (totalPlusCurrent)/(totalInteractions+1);
 			console.log(timetoput);
+			if(isNaN(timetoput)){
+				res.status(404);
+				res.send("error in parsing time");
+			}
 			if(req.body.first == true){
 				Project.update({'_id':projectDetails._id},{$inc:{'interactionsLeft':-1},$set:{'averageLoadTime':timetoput}},function(err){
 					if(err){
