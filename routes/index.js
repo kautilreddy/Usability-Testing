@@ -105,15 +105,15 @@ module.exports = function(passport){
 				res.send("no such pid");
 			}
 			var totalInteractions = (projectDetails.maxcount-projectDetails.interactionsLeft);
-			var totalLoadTime = projectDetails.averageLoadTime*totalInteractions;
-			var totalPlusCurrent = totalLoadTime + parseInt(req.body.time);
-			var timetoput = (totalPlusCurrent)/(totalInteractions+1);
+			var totalLoadTimeAvg = (projectDetails.averageLoadTime/(totalInteractions+1))*(totalInteractions/(totalInteractions+1));
+			var totalPlusCurrent = totalLoadTimeAvg + (parseInt(req.body.time)/(totalInteractions+1));
+			var timetoput = (totalPlusCurrent);
 			console.log(timetoput);
 			if(isNaN(timetoput)){
 				res.status(404);
 				res.send("error in parsing time");
 			}
-			if(req.body.first == true){
+			if(req.body.first === 'true'){
 				Project.update({'_id':projectDetails._id},{$inc:{'interactionsLeft':-1},$set:{'averageLoadTime':timetoput}},function(err){
 					if(err){
 						console.log('some error occurred ' + err);
