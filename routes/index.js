@@ -62,8 +62,7 @@ module.exports = function(passport){
 		var pid = req.params.pid;
 		Project.findById(pid,function(err,projectDetails){
 			if(err||isNotRealValue(projectDetails)){
-				res.status(404);
-				res.send("no such pid");
+				return res.send(400,"no such pid");
 			}
 			res.render('project',{project:projectDetails});
 		});
@@ -74,8 +73,7 @@ module.exports = function(passport){
 		Project.findById(pid,function(err,projectDetails){
 			console.log(typeof projectDetails);
 			if(err||isNotRealValue(projectDetails)){
-				res.status(404);
-				res.send("page not found");
+				return res.send(400,"no such pid");
 			}
 			else if(projectDetails.interactionsLeft>0){
 				res.render('interact',{project:projectDetails});
@@ -88,12 +86,13 @@ module.exports = function(passport){
 	router.get('/query/:pid', function(req, res){
 		var pid = req.params.pid;
 		Project.findById(pid,function(err,projectDetails){
-			console.log(typeof projectDetails);
+			console.log(JSON.stringify(projectDetails));
 			if(err||isNotRealValue(projectDetails)){
-				res.status(404);
-				res.send("page not found");
+				return res.send(400,"no such pid");
 			}
-			res.render('query',{project:projectDetails});
+			else{
+				res.render('query',{project:projectDetails});
+			}
 		});
 	});
 	router.post('/postLTime/:pid',function(req,res){
@@ -101,8 +100,7 @@ module.exports = function(passport){
 		console.log('in post time'+JSON.stringify(req.body));
 		Project.findById(pid,function(err,projectDetails){
 			if(err||isNotRealValue(projectDetails)){
-				res.status(404);
-				res.send("no such pid");
+				return res.send(400,"no such pid");
 			}
 			var totalInteractions = (projectDetails.maxcount-projectDetails.interactionsLeft);
 			var totalLoadTimeAvg = (projectDetails.averageLoadTime/(totalInteractions+1))*(totalInteractions);
@@ -114,8 +112,7 @@ module.exports = function(passport){
 			console.log('total plus current =  '+totalPlusCurrent);
 			console.log(timetoput);
 			if(isNaN(timetoput)){
-				res.status(404);
-				res.send("error in parsing time");
+				return res.send(400,"no such pid");
 			}
 			if(req.body.first === 'true'){
 				Project.update({'_id':projectDetails._id},{$inc:{'interactionsLeft':-1},$set:{'averageLoadTime':timetoput}},function(err){
@@ -129,11 +126,12 @@ module.exports = function(passport){
 				Project.update({'_id':projectDetails._id},{$set:{'averageLoadTime':timetoput}},function(err){
 					if(err){
 						console.log('some error occurred ' + err);
+						return res.send(500,"mongo error");
 						throw err;
 					}
 				});
 			}
-			res.status(200);
+			res.status(202);
 			res.send('time added');
 		});
 	});
@@ -143,8 +141,7 @@ module.exports = function(passport){
 		//console.log(JSON.stringify(DefaultList));
 		User.findById(req.user._id,function(err,user){
 			if(err||isNotRealValue(user)){
-				res.status(404);
-				res.send("no such user");
+				return res.send(400,"no such user");
 			}
 			var newProject = new Project();
         	// set the user's local credentials
@@ -184,16 +181,10 @@ module.exports = function(passport){
        	});
 		res.redirect('/home');
 	});
-	router.post('/urlgiven',function(req,res){
-		console.log('in urlgiven post');
-		console.log(req.param('url'));
-		var date = new Date();
-		var start = date.getTime();
-		console.log(start);
-		request("http://"+req.param('url'), function(error, response, body) {
-			console.log("server side time taken = "+((new Date().getTime()) - start));
-		});
-		res.redirect('http://'+req.param('url'));
+	router.post('/saveQueryResponse',function(req,res){
+		console.log('in save query response');
+		console.log('req content = '+JSON.stringify(req.body));
+		res.send(202,"response is saved");
 	});
 	/* Handle Logout */
 	router.get('/signout', function(req, res) {

@@ -12,14 +12,14 @@ html(lang='en')
     link(href='/css/bootstrap.css', rel='stylesheet')
     style(type='text/css').
       .panel-width {
-      max-width: 600px;
+      max-width: 700px;
       }
       th {text-align:center}
     script(type='text/javascript').
       function clearForm(){
       $("#ProjectForm")[0].reset();
       }
-    // Bootstrap
+    // bootstrap
     // HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries
     // WARNING: Respond.js doesn't work if you view the page via file://
     //
@@ -56,16 +56,19 @@ html(lang='en')
       .center-block.col-md-10(style='float: none;')
         .panel.panel-default
           .panel-body.panel-width
-            h2 Answer the following questions
+            h2#heading Answer the following questions
             br
             .container-fluid
-              form#ProjectForm.form-horizontal.form-signin(action='/query', method='POST')
+              form#queryForm.form-horizontal.form-signin
+                 //input(type='hidden', value='#{project._id}', name='_id')
+                 //input(type='hidden', value='#{project.questions.length}', name='totalQues')
+                 //input(type='hidden', value='#{project.queryType}', name='queryType')
                 ol
                   each question,index in project.questions
                     li
                       label #{question}
                       .form-group
-                        table#projectname.table.table-bordered.table-striped
+                        table.table.table-bordered.table-striped
                           thead
                             tr
                               th
@@ -80,17 +83,17 @@ html(lang='en')
                                 br
                                 | 5
                           tbody
-                            tr(align='center')
+                            tr.question(align='center')
                               td
-                                input(type='radio', name='#{index}', required='')
+                                input(type='radio', name='#{index}', required='' value='1')
                               td
-                                input(type='radio', name='#{index}')
+                                input(type='radio', name='#{index}' value='2')
                               td
-                                input(type='radio', name='#{index}')
+                                input(type='radio', name='#{index}' value='3')
                               td
-                                input(type='radio', name='#{index}')
+                                input(type='radio', name='#{index}' value='4')
                               td
-                                input(type='radio', name='#{index}')
+                                input(type='radio', name='#{index}' value='5')
                 .col-sm-offset-2.col-sm-3
                   button.btn.btn-default(onclick="sendSUS('#{project._id}','#{project.questions.length}','#{project.queryType}')") Submit!
                 .col-sm-2
@@ -101,3 +104,4 @@ html(lang='en')
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js')
     // Include all compiled plugins (below), or include individual files as needed
     script(src='/js/bootstrap.js')
+    script(src='/js/query.js')
