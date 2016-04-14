@@ -35,21 +35,12 @@ html(lang='en')
             span.icon-bar
             span.icon-bar
             span.icon-bar
-          a.navbar-brand(href='/home') Usability Testing
+          a.navbar-brand(href='/') Usability Testing
         // Collect the nav links, forms, and other content for toggling
         #cmenu.collapse.navbar-collapse
           ul.nav.navbar-nav
             li
               a(href='/#') About Us
-          ul.nav.navbar-nav.navbar-right
-            li.dropdown
-              a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
-                welcome
-                  | admin
-                  span.caret
-              ul.dropdown-menu
-                li
-                  a(href='/signout') Log out
         // /.navbar-collapse
       // /.container-fluid
     .container-fluid
@@ -60,7 +51,7 @@ html(lang='en')
             br
             .container-fluid
               form#queryForm
-                ol
+                ol(style='padding-left:5px;')
                   each question,index in project.questions
                     li
                       label #{question}
