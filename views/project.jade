@@ -57,7 +57,7 @@ html(lang='en')
           .col-md-3
             h3 URL to share:
           #urlbox.col-sm-8.input-group
-            input#url.form-control(type='text', value='localhost:8080/interact/'+project._id, style='margin-top: 5px;', readonly='readonly')
+            input#url.form-control(type='text', value='http://ec2-52-91-196-183.compute-1.amazonaws.com/interact/'+project._id, style='margin-top: 5px;', readonly='readonly')
             span.input-group-btn
               button#copy-button.btn.btn-default(type='button', style='margin-top: 5px;', data-toggle='tooltip', title='Copied!', data-clipboard-target='#url') copy
         .container-fluid
