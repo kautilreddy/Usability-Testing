@@ -26,7 +26,7 @@ function sendSUS(pid,totalQues,qtype){
 			total = total + temp;
 		});
 		if(ansArray.length === 0){
-			SUS.sus= 0;
+			SUS.sus= 100;
 		}
 		else{
 			SUS.sus=(100/(ansArray.length*5))*parseInt(total);
