@@ -17,7 +17,7 @@ html(lang='en')
       th {text-align:center}
     script(type='text/javascript').
       function clearForm(){
-      $("#ProjectForm")[0].reset();
+      $("#queryForm")[0].reset();
       }
     // bootstrap
     // HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries
@@ -59,10 +59,7 @@ html(lang='en')
             h2#heading Answer the following questions
             br
             .container-fluid
-              form#queryForm.form-horizontal.form-signin
-                 //input(type='hidden', value='#{project._id}', name='_id')
-                 //input(type='hidden', value='#{project.questions.length}', name='totalQues')
-                 //input(type='hidden', value='#{project.queryType}', name='queryType')
+              form#queryForm
                 ol
                   each question,index in project.questions
                     li

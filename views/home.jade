@@ -65,9 +65,9 @@ html(lang='en')
               case user.project_count
                 when 0
                   a.list-group-item.disabled(href='#') No projects to display
-              each project,index in user.projects
-                a.list-group-item(href='/project/'+project.pro_id) #{project.name}
-              // <a href="#" class="list-group-item">Project 1</a>
+              -var i = user.project_count - 1
+              while i >= 0
+                a.list-group-item(href='/project/'+user.projects[i].pro_id) #{user.projects[i--].name}
     // jQuery (necessary for Bootstrap's JavaScript plugins)
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js')
     // Include all compiled plugins (below), or include individual files as needed

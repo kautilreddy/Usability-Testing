@@ -8,7 +8,7 @@ html(lang='en')
     // The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags
     link(rel='shortcut icon', href='/img/favicon.ico', type='image/ico')
     link(rel='icon', href='/img/favicon.ico', type='image/ico')
-    title Create Project
+    title Project Home
     style(type='text/css').
       #urlbox{
       padding-top: 12px;
@@ -69,6 +69,9 @@ html(lang='en')
         .container-fluid
           .col-md-12
             h3 Average Load Time: #{project.averageLoadTime}
+        .container-fluid
+          .col-md-12
+            h3 Average SUS Score: #{project.avgSUS}
     // jQuery (necessary for Bootstrap's JavaScript plugins)
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js')
     // Include all compiled plugins (below), or include individual files as needed

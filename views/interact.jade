@@ -23,9 +23,9 @@ html(lang='en')
   body
     div
       h1 Task: #{project.task}
-      form(action='/query/#{project._id}' meathod='GET')
-        input(type='submit', value='Finish')
-      form(action='/report/#{project._id}' meathod='GET')
+      form(action='' meathod='POST')
+        input(type='submit', value='Finish' formaction='/query/#{project._id}' formmethod='POST')
+      form(action='/report/#{project._id}' meathod='POST')
         input(type='submit', value='Problem')
     iframe#main(src=''+project.url, width='100%', style='height: 100vh;')
       p Problem loading iframe
