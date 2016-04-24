@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
-var request = require('request');
 var User = require('../models/user');
 var Project = require('../models/project');
+var AutoAnalyse = require('../analyse/index.js');
 var DefaultList = require('../default_list');
 
 var isAuthenticated = function (req, res, next) {
@@ -128,6 +128,7 @@ module.exports = function(passport){
         	// set the user's local credentials
         	//console.log(req.param('ctrack')+' comparing with ='+ (req.param('ctrack')=='') + ' no string existing'+(req.param('performance')));
         	console.log(' req body = '+JSON.stringify(req.body));
+        	AutoAnalyse(req.param('url'));
         	newProject.pname = req.param('pname');
         	newProject.maxcount = req.param('maxcount');
         	newProject.ctrack = (req.param('ctrack')=='');
