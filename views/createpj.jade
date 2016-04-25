@@ -81,20 +81,18 @@ html(lang='en')
               .form-group
                 .col-sm-5.col-sm-offset-2.checkbox
                   label
-                    input#ctrack(type='checkbox', value='', name='ctrack')
-                    | Click Tracking
+                    input#semantic(type='checkbox', value='', name='semantics')
+                    | Semantics Analysis
                 .col-sm-5.checkbox
                   label
                     input#network(type='checkbox', value='', name='performance')
                     | Network Performance
                 .col-sm-5.col-sm-offset-2.checkbox
                   label
-                    input#semantic(type='checkbox', value='', name='semantics')
-                    | Semantics Analysis
-                .col-sm-5.checkbox
-                  label
                     input#query(type='checkbox', value='', name='query')
                     | Post interaction query
+                .col-sm-5.checkbox
+                  label 
                 #queryprompt
                   .row
                     label.col-sm-4.control-label Query Type:

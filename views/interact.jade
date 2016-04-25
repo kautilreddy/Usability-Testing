@@ -23,10 +23,11 @@ html(lang='en')
   body
     div
       h1 Task: #{project.task}
-      form(action='' meathod='POST')
+      form(action='' method='POST')
         input(type='submit', value='Finish' formaction='/query/#{project._id}' formmethod='POST')
-      form(action='/report/#{project._id}' meathod='POST')
-        input(type='submit', value='Problem')
+      form(action='/report/#{project._id}' method='POST')
+        input(type="text", name='problem',value='Ex. Cannot Load Page')
+        input(type='submit', value='report problem')
     iframe#main(src=''+project.url, width='100%', style='height: 100vh;')
       p Problem loading iframe
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js')

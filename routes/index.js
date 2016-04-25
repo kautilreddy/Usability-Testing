@@ -67,7 +67,6 @@ module.exports = function(passport){
 			res.render('project',{project:projectDetails});
 		});
 	});
-
 	router.get('/interact/:pid', function(req, res){
 		var pid = req.params.pid;
 		Project.findById(pid,function(err,projectDetails){
@@ -131,7 +130,6 @@ module.exports = function(passport){
         	newProject.pname = req.param('pname');
         	newProject.autoAnalyse = 'Loading ETA:5minutes';
         	newProject.maxcount = req.param('maxcount');
-        	newProject.ctrack = (req.param('ctrack')=='');
         	newProject.performance = (req.param('performance')=='');
         	newProject.semantics = (req.param('semantics')=='');
         	newProject.interactionsLeft= newProject.maxcount;
@@ -151,10 +149,9 @@ module.exports = function(passport){
        		var proj_id;
        		newProject.save(function(err,proj) {
        			if (err){
-       				console.log('Error in Saving user: '+err);  
+       				console.log('Error in Saving project: '+err);  
        				throw err;  
        			}
-       			console.log('User Registration succesful');
        			proj_id = proj._id;
        			User.update({'username':req.user.username},{$inc:{'project_count':1},$push:{'projects':{'name':proj.pname,'pro_id':proj._id}}},function(err){
        				if(err){
@@ -162,14 +159,15 @@ module.exports = function(passport){
        					throw err;
        				}
 					res.redirect('/home');
+        			if(!(req.param('semantics')=='')){
+        				newProject.autoAnalyse = 'Not Set';
+        			}
+        			else{
+						console.log('id in routes = '+proj_id);
+        				AutoAnalyse(req.param('url'),proj_id);
+        			}
        			});
        		});
-        	if(!(req.param('semantics')=='')){
-        		newProject.autoAnalyse = 'Not Set';
-        	}
-        	else{
-	        		console.log(AutoAnalyse(req.param('url')));
-        	}
        	});
 	});
 	router.post('/saveQueryResponse',function(req,res){
@@ -184,13 +182,33 @@ module.exports = function(passport){
 			var totalSUSAvg = (projectDetails.avgSUS/(totalInteractions+1))*(totalInteractions);
 			var totalPlusCurrent = totalSUSAvg + (parseInt(req.body.sus)/(totalInteractions+1));
 			var sustoput = (totalPlusCurrent);
-			Project.update({'_id':projectDetails._id},{$inc:{'interactionsLeft':-1},$set:{'avgSUS':sustoput}},function(err){
-				if(err){
-					console.log('some error occurred ' + err);
-					throw err;
-				}
-			});
+			if(projectDetails.interactionsLeft==0){
+				Project.update({'_id':projectDetails._id},{$set:{'avgSUS':sustoput}},function(err){
+					if(err){
+						console.log('some error occurred ' + err);
+						throw err;
+					}
+				});
+			}
+			else{
+				Project.update({'_id':projectDetails._id},{$inc:{'interactionsLeft':-1},$set:{'avgSUS':sustoput}},function(err){
+					if(err){
+						console.log('some error occurred ' + err);
+						throw err;
+					}
+				});
+			}
 		});
+	});
+	router.post('/report/:pid',function(req,res){
+		var pid = req.params.pid;
+		Project.update({'_id':pid},{$push:{'problem':req.param('problem')}},function(err){
+			if(err){
+				console.log('some error occurred ' + err);
+				throw err;
+			}
+		});
+		res.render('responseSaved');
 	});
 	/* Handle Logout */
 	router.get('/signout', function(req, res) {

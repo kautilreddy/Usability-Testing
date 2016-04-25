@@ -15,7 +15,8 @@ module.exports = mongoose.model('Project',{
 	averageLoadTime:Number,
 	avgSUS:Number,
 	autoAnalyse:String,
-	autoAnalysisResults:{},
+	autoAnalysisResults:Schema.Types.Mixed,
 	queryType:String,
+	problem:[String],
 	questions:[String]
 });
