@@ -128,8 +128,8 @@ module.exports = function(passport){
         	// set the user's local credentials
         	//console.log(req.param('ctrack')+' comparing with ='+ (req.param('ctrack')=='') + ' no string existing'+(req.param('performance')));
         	console.log(' req body = '+JSON.stringify(req.body));
-        	AutoAnalyse(req.param('url'));
         	newProject.pname = req.param('pname');
+        	newProject.autoAnalyse = 'Loading ETA:5minutes';
         	newProject.maxcount = req.param('maxcount');
         	newProject.ctrack = (req.param('ctrack')=='');
         	newProject.performance = (req.param('performance')=='');
@@ -148,12 +148,14 @@ module.exports = function(passport){
         		newProject.questions = DefaultList;
         	}
        		// save the user
+       		var proj_id;
        		newProject.save(function(err,proj) {
        			if (err){
        				console.log('Error in Saving user: '+err);  
        				throw err;  
        			}
        			console.log('User Registration succesful');
+       			proj_id = proj._id;
        			User.update({'username':req.user.username},{$inc:{'project_count':1},$push:{'projects':{'name':proj.pname,'pro_id':proj._id}}},function(err){
        				if(err){
        					console.log('some error occurred ' + err);
@@ -162,6 +164,12 @@ module.exports = function(passport){
 					res.redirect('/home');
        			});
        		});
+        	if(!(req.param('semantics')=='')){
+        		newProject.autoAnalyse = 'Not Set';
+        	}
+        	else{
+	        		console.log(AutoAnalyse(req.param('url')));
+        	}
        	});
 	});
 	router.post('/saveQueryResponse',function(req,res){
